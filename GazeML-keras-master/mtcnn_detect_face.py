@@ -167,7 +167,7 @@ class Network(object):
 
     @layer
     def prelu(self, inp, name):
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             i = int(inp.get_shape()[-1])
             alpha = self.make_var('alpha', shape=(i,))
             output = tf.nn.relu(inp) + tf.multiply(alpha, -tf.nn.relu(-inp))
