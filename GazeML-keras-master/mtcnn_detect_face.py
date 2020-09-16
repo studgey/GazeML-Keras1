@@ -124,7 +124,7 @@ class Network(object):
 
     def make_var(self, name, shape):
         """Creates a new TensorFlow variable."""
-        return tf.get_variable(name, shape, trainable=self.trainable)
+        return tf.compat.v1.get_variable(name, shape, trainable=self.trainable)
 
     def validate_padding(self, padding):
         """Verifies that the padding is one of the supported ones."""
@@ -152,7 +152,7 @@ class Network(object):
         assert c_o % group == 0
         # Convolution for a given input and kernel
         convolve = lambda i, k: tf.nn.conv2d(i, k, [1, s_h, s_w, 1], padding=padding)
-        with tf.variable_scope(name) as scope:
+        with tf.compat.v1.variable_scope(name) as scope:
             kernel = self.make_var('weights', shape=[k_h, k_w, c_i // group, c_o])
             # This is the common-case. Convolve the input without any further complications.
             output = convolve(inp, kernel)
@@ -176,7 +176,7 @@ class Network(object):
     @layer
     def max_pool(self, inp, k_h, k_w, s_h, s_w, name, padding='SAME'):
         self.validate_padding(padding)
-        return tf.nn.max_pool(inp,
+        return tf.nn.max_pool2d(inp,
                               ksize=[1, k_h, k_w, 1],
                               strides=[1, s_h, s_w, 1],
                               padding=padding,
@@ -212,7 +212,7 @@ class Network(object):
         max_axis = tf.reduce_max(target, axis, keepdims=True)
         target_exp = tf.exp(target-max_axis)
         normalize = tf.reduce_sum(target_exp, axis, keepdims=True)
-        softmax = tf.div(target_exp, normalize, name)
+        softmax = tf.math.divide(target_exp, normalize, name)
         return softmax
     
 class PNet(Network):
