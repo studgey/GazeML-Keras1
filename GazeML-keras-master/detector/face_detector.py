@@ -26,12 +26,12 @@ class MTCNNFaceDetector():
             data = tf.compat.v1.placeholder(tf.float32, (None,None,None,3), 'input')
             pnet = mtcnn_detect_face.PNet({'data':data})
             pnet.load(os.path.join(model_path, 'det1.npy'), sess)
-        with tf.variable_scope('rnet'):
+        with tf.compat.v1.variable_scope('rnet'):
             data = tf.compat.v1.placeholder(tf.float32, (None,24,24,3), 'input')
             rnet = mtcnn_detect_face.RNet({'data':data})
             rnet.load(os.path.join(model_path, 'det2.npy'), sess)
-        with tf.variable_scope('onet'):
-            data = tf.placeholder(tf.float32, (None,48,48,3), 'input')
+        with tf.compat.v1.variable_scope('onet'):
+            data = tf.compat.v1.placeholder(tf.float32, (None,48,48,3), 'input')
             onet = mtcnn_detect_face.ONet({'data':data})
             onet.load(os.path.join(model_path, 'det3.npy'), sess)
         self.pnet = K.function([pnet.layers['data']], [pnet.layers['conv4-2'], pnet.layers['prob1']])
