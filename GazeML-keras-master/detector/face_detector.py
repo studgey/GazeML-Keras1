@@ -22,8 +22,8 @@ class MTCNNFaceDetector():
         if not model_path:
             model_path, _ = os.path.split(os.path.realpath(__file__))
 
-        with tf.variable_scope('pnet'):
-            data = tf.placeholder(tf.float32, (None,None,None,3), 'input')
+        with tf.compat.v1.variable_scope('pnet'):
+            data = tf.compat.v1.placeholder(tf.float32, (None,None,None,3), 'input')
             pnet = mtcnn_detect_face.PNet({'data':data})
             pnet.load(os.path.join(model_path, 'det1.npy'), sess)
         with tf.variable_scope('rnet'):
