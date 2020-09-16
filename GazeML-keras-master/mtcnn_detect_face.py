@@ -184,7 +184,7 @@ class Network(object):
 
     @layer
     def fc(self, inp, num_out, name, relu=True):
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             input_shape = inp.get_shape()
             if input_shape.ndims == 4:
                 # The input is spatial. Vectorize it first.
